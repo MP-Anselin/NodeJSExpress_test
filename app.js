@@ -1,9 +1,12 @@
 const express = require('express')
 const dotenv = require('dotenv')
-const passport = require("passport");
+const connectMongoDB = require('./config/mongodb')
+
 
 // Load config
 dotenv.config({ path: './config/config.env' })
+
+connectMongoDB()
 
 const app = express()
 

@@ -4,4 +4,4 @@
 /.angular/cache
 /.idea
 
-/config
+/config/config.env

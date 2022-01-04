@@ -1,0 +1,7 @@
+# dependencies
+/node_modules
+
+/.angular/cache
+/.idea
+
+/config

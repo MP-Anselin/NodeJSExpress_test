@@ -1,6 +1,7 @@
 import CommandModel from "./model/command.model";
 import {UpdateCommandDto, CreateCommandDto} from "./dto/index.dto";
 import {logger} from "../../logger";
+import {commandNumber} from "./aggregates";
 
 export class CommandService {
     private commandModel = CommandModel;
@@ -21,26 +22,10 @@ export class CommandService {
         return this.commandModel.findOneAndUpdate({_id}, updateCommandData)
     }
 
-    async nbrByDate(date: string) {
-        let toFindDate = new Date(date)
+    async nbrByDate(date1: string) {
         logger.info("Route: nbr of command By Date");
-        return this.commandModel.aggregate([
-            {
-                $match: {
-                    date: {
-                        $gte: new Date(toFindDate.getFullYear(), toFindDate.getMonth(), toFindDate.getDate(), 0),
-                        $lt: new Date(toFindDate.getFullYear(), toFindDate.getMonth(), toFindDate.getDate(), 24),
-                    },
-                }
-            },
-            {
-                $group: {
-                    _id: {
-                        $dateToString: {format: "%Y-%m-%d", date: "$date"}
-                    }, numberOfCommand: {$sum: 1}
-                },
-            }
-        ])
+        const date = new Date(date1)
+        return this.commandModel.aggregate(commandNumber(new Date(date)))
     }
 
     async buy(_id: string, updateCommandData: UpdateCommandDto) {

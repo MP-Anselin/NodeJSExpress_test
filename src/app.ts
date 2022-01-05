@@ -2,7 +2,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import connectDB from "./api/services/database.service";
-import Controller from "./api/interfaces/controller.interface";
+import Controller from "./api/tables/controller";
 
 class App {
     public app: express.Application;

@@ -1,10 +1,11 @@
-import { IsString } from 'class-validator';
+import { IsString, IsNumber, Min } from 'class-validator';
 
 class CreateProductDto {
     @IsString()
     public name: string;
 
-    @IsString()
+    @IsNumber()
+    @Min(0)
     public price: number;
 
     @IsString()
@@ -13,7 +14,8 @@ class CreateProductDto {
     @IsString()
     public description: string;
 
-    @IsString()
+    @IsNumber()
+    @Min(0)
     public quantity: number;
 }
 

@@ -2,10 +2,16 @@
   "name": "nodejsexpress_test",
   "version": "1.0.0",
   "description": "Test create api with  node js ts and express",
-  "main": "app.js",
+  "main": "src/app.ts",
+  "keywords": [
+    "mongodb",
+    "typescript",
+    "express",
+    "atlas"
+  ],
   "scripts": {
-    "start": "cross-env NODE_ENV=production node app",
-    "dev": "cross-env NODE_ENV=development nodemon app"
+    "start": "cross-env NODE_ENV=production node src/server.ts",
+    "dev": "cross-env NODE_ENV=development nodemon src/server.ts"
   },
   "repository": {
     "type": "git",
@@ -19,6 +25,7 @@
   "homepage": "https://github.com/MP-Anselin/NodeJSExpress_test#readme",
   "dependencies": {
     "connect-mongo": "^4.6.0",
+    "cookie-parser": "^1.4.6",
     "dotenv": "^10.0.0",
     "epress": "^0.0.1-security",
     "express": "^4.17.2",
@@ -29,9 +36,16 @@
     "mongoose": "^6.1.4",
     "morgan": "^1.10.0",
     "passport": "^0.5.2",
-    "passport-google-oauth20": "^2.0.0"
+    "passport-google-oauth20": "^2.0.0",
+    "tslog": "^3.3.1",
+    "typescript-class-validator": "^0.0.6",
+    "typescript-log": "^2.0.0"
   },
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.2",
+    "@types/express": "^4.17.13",
+    "@types/morgan": "^1.9.3",
+    "@types/node": "^17.0.7",
     "cross-env": "^7.0.3",
     "nodemon": "^2.0.15",
     "ts-node": "^10.4.0",

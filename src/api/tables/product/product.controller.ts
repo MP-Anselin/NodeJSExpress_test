@@ -11,16 +11,11 @@ export class ProductController extends Controller {
     }
 
     private initializeRoutes() {
-        this.router.get(this.path, this.getAllProducts);
-        this.router.get(`${this.path}/:id`, this.getProductById);
+        this.router.get(this.path, this.getAllProducts)
+        this.router.get(`${this.path}/:id`, this.getProductById)
         this.router.post(this.path, this.createProduct)
         this.router.patch(`${this.path}/:id`, this.updateProduct)
         this.router.delete(`${this.path}/:id`, this.deleteProduct)
-        /*this.router
-            .all(`${this.path}/*`, authMiddleware)
-            .patch(`${this.path}/:id`, validationMiddleware(CreateProcutDto, true), this.modifyPost)
-            .delete(`${this.path}/:id`, this.deletePost)
-            .post(this.path, authMiddleware, validationMiddleware(CreatePostDto), this.createPost);*/
     }
 
     private getAllProducts = async (request: Request, response: Response) => {

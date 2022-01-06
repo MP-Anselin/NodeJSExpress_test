@@ -15,7 +15,6 @@ class App {
         App.connectToTheDatabase();
         this.initializeMiddlewares();
         this.initializeControllers(controllers);
-        //this.initializeErrorHandling();
     }
 
     public availableRoutes(){
@@ -27,17 +26,9 @@ class App {
         });
     }
 
-    public getServer() {
-        return this.app;
-    }
-
     private initializeMiddlewares() {
         this.app.use(bodyParser.json());
         this.app.use(cookieParser());
-    }
-
-    private initializeErrorHandling() {
-        //this.app.use(errorMiddleware);
     }
 
     private initializeControllers(controllers: Controller[]) {

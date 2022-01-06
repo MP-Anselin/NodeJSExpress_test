@@ -1,0 +1,10 @@
+version: '3.3'
+services:
+  angular-docker:
+    container_name: nodejs-express-test-docker-container
+    restart: on-failure
+    build: .
+    volumes:
+      - ./src:/app/src
+    ports:
+      - '5565:5565'

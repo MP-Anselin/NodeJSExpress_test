@@ -2,7 +2,6 @@ import {Request, Response, NextFunction} from 'express';
 import Controller from "../controller";
 import {CommandService} from "./command.service";
 import {CreateCommandDto, UpdateCommandDto} from "./dto/index.dto";
-import {ObjectId} from "mongodb";
 
 export class CommandController extends Controller{
     constructor(private readonly commandService: CommandService = new CommandService()) {

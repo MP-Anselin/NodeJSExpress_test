@@ -28,6 +28,34 @@ export class ProductService{
         return this.productModel.findOneAndUpdate({_id }, updateProductsData, {useFindAndModify: false} )
     }
 
+    async getPrice(_id: string){
+        const currentProd = await this.findOne(_id)
+       return  currentProd?.price ? currentProd.price : 0
+    }
+
+    async reduceQuantity(_id: string){
+        const currentProd = await this.findOne(_id)
+        console.log("reduceQuantity: currentProd = ", currentProd)
+        logger.info("Route: update a product");
+        //return this.productModel.findOneAndUpdate({_id }, currentProd, {useFindAndModify: false} )
+    }
+
+/*    private async getPriceList(list: ObjectId[]){
+        console.log("getPriceList: list = ", list)
+        return this.productModel.aggregate([
+            {
+                $match: {_id: {$in: list}}
+            },
+            {
+                $group: {
+                    _id: "$_id",
+                    totalPrice: {$sum: "$price"}
+                }
+            },
+            { $sortByCount: '$_id' }
+        ])
+    }*/
+
     async delete(_id: string){
         logger.info("Route: delete a product");
         return this.productModel.findByIdAndDelete(_id)

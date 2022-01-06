@@ -1,4 +1,4 @@
-import { Schema} from 'mongoose';
+import {Schema} from 'mongoose';
 import {CommandInterface} from "../command.interface";
 
 export const CommandSchema = new Schema<CommandInterface>({
@@ -7,4 +7,5 @@ export const CommandSchema = new Schema<CommandInterface>({
     updatedAt: {type: Date, required: true},
     articles: {type: [], required: true},
     min_price: {type: Number, required: true},
+    isCompleted: {type: Boolean},
 },{timestamps: true})

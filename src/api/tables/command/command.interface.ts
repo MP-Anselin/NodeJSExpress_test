@@ -6,4 +6,5 @@ export interface CommandInterface extends Document{
     updatedAt: Date,
     articles: [],
     min_price: number,
+    isCompleted: boolean,
 }

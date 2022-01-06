@@ -1,6 +1,6 @@
-export const commandNumber = (date: Date) => {
-    const min = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0);
-    const max = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 24);
+export const commandNumberAggregate = (date: Date) => {
+    const min = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 59);
+    const max = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 24, 59);
     return [
         {
             $match: {

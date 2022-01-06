@@ -1,5 +1,5 @@
 import {Schema} from 'mongoose';
-import {CommandInterface} from "../command.interface";
+import {CommandInterface} from "../interfaces";
 
 export const CommandSchema = new Schema<CommandInterface>({
     date: {type: Date, required: true},

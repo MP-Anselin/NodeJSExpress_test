@@ -1,4 +1,4 @@
-export const commandPriceUp = (date: Date, price: number) => {
+export const commandPriceUpAggregate = (date: Date, price: number) => {
     const min = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0);
     const max = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 24);
     return [

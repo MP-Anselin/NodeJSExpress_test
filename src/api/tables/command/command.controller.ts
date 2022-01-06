@@ -2,8 +2,9 @@ import {Request, Response, NextFunction} from 'express';
 import Controller from "../controller";
 import {CommandService} from "./command.service";
 import {CreateCommandDto, UpdateCommandDto} from "./dto/index.dto";
+import {FiltersCommandInterface} from "./interfaces";
 
-export class CommandController extends Controller{
+export class CommandController extends Controller {
     constructor(private readonly commandService: CommandService = new CommandService()) {
         super('/commands')
         this.initializeRoutes();
@@ -11,11 +12,13 @@ export class CommandController extends Controller{
 
     private initializeRoutes() {
         this.router.post(this.path, this.createCommand)
-        this.router.get(`${this.path}/:date`, this.getNbrCommandByDate);
-        this.router.patch(`${this.path}/:id`, this.updateCommand)
-        this.router.patch(`${this.path}/add/:id&:productId`, this.addProduct)
-        this.router.patch(`${this.path}/delete/:id&:productId`, this.deleteProduct)
-        this.router.patch(`${this.path}/buy/:id?`, this.buyCommand)
+            .get(`${this.path}/find/:date&:price`, this.getCommandByDatePrice)
+            .get(`${this.path}/find/date/:date`, this.getNbrCommandByDate)
+            .get(`${this.path}/sort*?`, this.sortCommandBy)
+            .patch(`${this.path}/:id`, this.updateCommand)
+            .patch(`${this.path}/add/:id&:productId`, this.addProduct)
+            .patch(`${this.path}/delete/:id&:productId`, this.deleteProduct)
+            .patch(`${this.path}/buy/:id?`, this.buyCommand)
         /*this.router
             .all(`${this.path}/*`, authMiddleware)
             .patch(`${this.path}/:id`, validationMiddleware(CreateProcutDto, true), this.modifyPost)
@@ -36,6 +39,16 @@ export class CommandController extends Controller{
     private getNbrCommandByDate = async (request: Request, response: Response, next: NextFunction) => {
         response.send(await this.commandService.nbrByDate(request.params.date))
     }
+
+    private getCommandByDatePrice = async (request: Request, response: Response, next: NextFunction) => {
+        response.send(await this.commandService.commandByDatePrice(request.params.date, request.params.price))
+    }
+
+    private sortCommandBy = async (request: Request, response: Response, next: NextFunction) => {
+        const data: FiltersCommandInterface = request.query
+        response.send(await this.commandService.sortCommandBy(data))
+    }
+
 
     private addProduct = async (request: Request, response: Response, next: NextFunction) => {
         response.send(await this.commandService.addProduct(request.params.id, request.params.productId))

@@ -1,11 +1,11 @@
-import { IsNumber, IsDate, IsArray } from 'class-validator';
+import { IsNumber, IsArray } from 'class-validator';
 
 class CreateCommandDto {
     @IsArray()
-    public articles: [];
+    public articles: [] = [];
 
     @IsNumber()
-    public min_price: number;
+    public min_price: number = 0;
 }
 
 export default CreateCommandDto;

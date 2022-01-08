@@ -1,7 +1,6 @@
 import { AsyncLocalStorage } from "async_hooks";
 import { Logger } from "tslog";
 
-
 const asyncLocalStorage: AsyncLocalStorage<{ requestId: string }> =
     new AsyncLocalStorage();
 

@@ -25,6 +25,10 @@
   },
   "homepage": "https://github.com/MP-Anselin/NodeJSExpress_test#readme",
   "dependencies": {
+    "@stdlib/error-to-json": "^0.0.6",
+    "@types/jsonwebtoken": "^8.5.6",
+    "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
     "connect-mongo": "^4.6.0",
     "cookie-parser": "^1.4.6",
     "dotenv": "^10.0.0",
@@ -33,6 +37,7 @@
     "express-handlebars": "^6.0.2",
     "express-session": "^1.17.2",
     "isodate": "^0.1.4",
+    "jwt-service": "^8.0.0",
     "method-override": "^3.0.0",
     "moment": "^2.29.1",
     "mongoose": "^6.1.4",
@@ -44,6 +49,7 @@
     "typescript-log": "^2.0.0"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
     "@types/cookie-parser": "^1.4.2",
     "@types/express": "^4.17.13",
     "@types/morgan": "^1.9.3",

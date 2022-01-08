@@ -1,7 +1,9 @@
 import {Request, Response, NextFunction} from 'express';
 import Controller from "../controller";
 import {ProductService} from "./product.service";
-import {UpdateProductDto, CreateProductDto} from "./dto/index.dto"
+import {UpdateProductDto, CreateProductDto} from "./dto"
+import {AuthenticationMiddleware} from "../../middleware";
+import ValidationUserMiddleware from "../../middleware/validateUser.middleware";
 
 export class ProductController extends Controller {
 
@@ -11,32 +13,41 @@ export class ProductController extends Controller {
     }
 
     private initializeRoutes() {
-        this.router.get(this.path, this.getAllProducts)
-        this.router.get(`${this.path}/:id`, this.getProductById)
-        this.router.post(this.path, this.createProduct)
-        this.router.patch(`${this.path}/:id`, this.updateProduct)
-        this.router.delete(`${this.path}/:id`, this.deleteProduct)
+        this.router.all(`${this.path}/*`, AuthenticationMiddleware)
+            .get(this.path, AuthenticationMiddleware, this.getAllProducts)
+            .get(`${this.path}/:id`, this.getProductById)
+            .post(this.path, AuthenticationMiddleware, ValidationUserMiddleware(CreateProductDto, true), this.createProduct)
+            .patch(`${this.path}/:id`, AuthenticationMiddleware, ValidationUserMiddleware(UpdateProductDto, true), this.updateProduct)
+            .delete(`${this.path}/:id`, AuthenticationMiddleware, this.deleteProduct)
     }
 
     private getAllProducts = async (request: Request, response: Response) => {
         response.send(await this.productService.findAll());
     }
 
-    private getProductById = async (request: Request, response: Response, next: NextFunction) => {
-        response.send(await this.productService.findOne(request.params.id))
+    private getProductById = async (request: Request, response: Response, next_f: NextFunction) => {
+        const result = await this.productService.findOne({_id: request.params.id}, next_f)
+        if (result)
+            response.send(result)
     }
 
-    private createProduct = async (request: Request, response: Response) => {
+    private createProduct = async (request: Request, response: Response, next_f: NextFunction) => {
         const productData: CreateProductDto = request.body;
-        response.send(await this.productService.create(productData))
+        const result = await this.productService.create(productData, next_f)
+        if (result)
+            response.send(result)
     }
 
-    private updateProduct = async (request: Request, response: Response, next: NextFunction) => {
+    private updateProduct = async (request: Request, response: Response, next_f: NextFunction) => {
         const productData: UpdateProductDto = request.body;
-        response.send(await this.productService.update(request.params.id, productData))
+        const result = await this.productService.update(request.params.id, productData, next_f)
+        if (result)
+            response.send(result)
     }
 
-    private deleteProduct = async (request: Request, response: Response, next: NextFunction) => {
-        response.send(await this.productService.delete(request.params.id))
+    private deleteProduct = async (request: Request, response: Response, next_f: NextFunction) => {
+        const result = await this.productService.delete(request.params.id, next_f)
+        if (result)
+            response.send(result)
     }
 }

@@ -1,0 +1,1 @@
+export {default as LogInDto} from "./logIn.dto"

@@ -3,6 +3,8 @@ import cookieParser from 'cookie-parser';
 import express from 'express';
 import connectDB from "./api/services/database.service";
 import Controller from "./api/tables/controller";
+import {ErrorHandlingMiddleware} from "./api/middleware";
+import {logger} from "./api/logger";
 
 class App {
     public app: express.Application;
@@ -10,19 +12,15 @@ class App {
     constructor(controllers: Controller[]) {
         this.app = express();
 
-        this.availableRoutes()
-
         App.connectToTheDatabase();
         this.initializeMiddlewares();
         this.initializeControllers(controllers);
-    }
-
-    public availableRoutes(){
+        this.initializeErrorHandling();
     }
 
     public listen() {
         this.app.listen(process.env.PORT, () => {
-            console.log(`App listening on the port ${process.env.PORT}`);
+            logger.info(`App listening on the port ${process.env.PORT}`);
         });
     }
 
@@ -35,6 +33,10 @@ class App {
         controllers.forEach((controller) => {
             this.app.use('/', controller.router);
         });
+    }
+
+    private initializeErrorHandling() {
+        this.app.use(ErrorHandlingMiddleware);
     }
 
     private static connectToTheDatabase() {

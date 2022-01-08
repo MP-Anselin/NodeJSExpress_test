@@ -1,46 +1,78 @@
 import ProductModel from "./model/product.model";
-import {UpdateProductDto, CreateProductDto} from "./dto/index.dto"
+import {UpdateProductDto, CreateProductDto} from "./dto"
 import {logger} from "../../logger";
+import {NextFunction} from "express";
+import {ProductErrorException} from "../../httpErrorException";
 
-export class ProductService{
+export class ProductService {
     private productModel = ProductModel;
 
-    async create(newProductData: CreateProductDto){
+    async create(newProductData: CreateProductDto, next_f: NextFunction) {
         const createdProduct = new this.productModel({
             ...newProductData,
         });
-        logger.info("Route: create new Products");
-        return await createdProduct.save() ;
+        const response = await createdProduct.save();
+        if (response) {
+            logger.info("Route: Product => create new Products");
+            return (response)
+        } else {
+            logger.error("Route: Product => [error] create new Products");
+            next_f(new ProductErrorException(<string>process.env.INTERNAL_SERVER_ERROR_MSG))
+        }
     }
 
     async findAll() {
-        logger.info("Route: findAll product");
+        logger.info("Route: Product => findAll product");
         return this.productModel.find();
     }
 
-    async findOne(_id: string){
+    async findOne(filter: {}, next_f: NextFunction) {
         logger.info("Route: findOne a product");
-        return this.productModel.findOne({_id})
+        const response = this.productModel.findOne(filter)
+        if (response) {
+            logger.info("Route: findOne a product");
+            return (response)
+        } else {
+            logger.error("Route: Product => [error] findOne a product");
+            next_f(new ProductErrorException(<string>process.env.NOT_FOUND_CODE, `the server could not find product with element ${filter}`))
+        }
     }
 
-    async update(_id: string, updateProductsData: UpdateProductDto){
-        logger.info("Route: update a product");
-        return this.productModel.findOneAndUpdate({_id }, updateProductsData, {useFindAndModify: false} )
+    async update(_id: string, updateProductsData: UpdateProductDto, next_f: NextFunction) {
+        const response = this.productModel.findOneAndUpdate({_id}, updateProductsData, {useFindAndModify: false})
+        if (response) {
+            logger.info("Route: Product => update a product");
+            return (response)
+        } else {
+            logger.error("Route: Product => [error] update a product");
+            next_f(new ProductErrorException(<string>process.env.NOT_FOUND_CODE, `the server could not find product with _id ${_id}`))
+        }
     }
 
-    async getPrice(_id: string){
-        const currentProd = await this.findOne(_id)
-       return  currentProd?.price ? currentProd.price : 0
+    async getPrice(_id: string, next_f: NextFunction) {
+        const currentProd = await this.findOne({_id: _id}, next_f)
+        return currentProd?.price ? currentProd.price : 0
     }
 
-    async reduceQuantity(_id: string){
-        const currentProd = await this.findOne(_id)
-        console.log("reduceQuantity: currentProd = ", currentProd)
-        logger.info("Route: update a product");
+    async reduceQuantity(_id: string, next_f: NextFunction) {
+        const response = await this.findOne({_id: _id}, next_f)
+        if (response) {
+            logger.info("Route: Product => reduceQuantity a product");
+            return (response)
+        } else {
+            logger.error("Route: Product => [error] reduceQuantity a product");
+            next_f(new ProductErrorException(<string>process.env.NOT_FOUND_CODE, `the server could not find product with _id ${_id}`))
+        }
     }
 
-    async delete(_id: string){
-        logger.info("Route: delete a product");
-        return this.productModel.findByIdAndDelete(_id)
+    async delete(_id: string, next_f: NextFunction) {
+        const response = await this.productModel.findByIdAndDelete(_id)
+        if (response) {
+            logger.info("Route: Product => delete a product");
+            return (response)
+        } else {
+            logger.error("Route: Product => [error] delete a product");
+            next_f(new ProductErrorException(<string>process.env.NOT_FOUND_CODE, `the server could not find product with _id ${_id}`))
+        }
     }
 }

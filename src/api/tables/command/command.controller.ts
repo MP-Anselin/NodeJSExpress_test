@@ -1,7 +1,7 @@
 import {Request, Response, NextFunction} from 'express';
 import Controller from "../controller";
 import {CommandService} from "./command.service";
-import {CreateCommandDto, UpdateCommandDto} from "./dto/index.dto";
+import {CreateCommandDto, UpdateCommandDto} from "./dto";
 import {FiltersCommandInterface} from "./interfaces";
 
 export class CommandController extends Controller {
@@ -19,47 +19,45 @@ export class CommandController extends Controller {
             .patch(`${this.path}/add/:id&:productId`, this.addProduct)
             .patch(`${this.path}/delete/:id&:productId`, this.deleteProduct)
             .patch(`${this.path}/buy/:id?`, this.buyCommand)
-        /*this.router
-            .all(`${this.path}/*`, authMiddleware)
-            .patch(`${this.path}/:id`, validationMiddleware(CreateProcutDto, true), this.modifyPost)
-            .delete(`${this.path}/:id`, this.deletePost)
-            .post(this.path, authMiddleware, validationMiddleware(CreatePostDto), this.createPost);*/
     }
 
-    private createCommand = async (request: Request, response: Response) => {
+    private createCommand = async (request: Request, response: Response, next_f: NextFunction) => {
         const commandData: CreateCommandDto = request.body;
-        response.send(await this.commandService.create(commandData))
+        const result = await this.commandService.create(commandData, next_f)
+        if (result)
+            response.send(result)
     }
 
-    private updateCommand = async (request: Request, response: Response, next: NextFunction) => {
+    private updateCommand = async (request: Request, response: Response, next_f: NextFunction) => {
         const commandData: UpdateCommandDto = request.body;
-        response.send(await this.commandService.update(request.params.id, commandData))
+        response.send(await this.commandService.update(request.params.id, commandData, next_f))
     }
 
-    private getNbrCommandByDate = async (request: Request, response: Response, next: NextFunction) => {
+    private getNbrCommandByDate = async (request: Request, response: Response) => {
         response.send(await this.commandService.nbrByDate(request.params.date))
     }
 
-    private getCommandByDatePrice = async (request: Request, response: Response, next: NextFunction) => {
+    private getCommandByDatePrice = async (request: Request, response: Response) => {
         response.send(await this.commandService.commandByDatePrice(request.params.date, request.params.price))
     }
 
-    private sortCommandBy = async (request: Request, response: Response, next: NextFunction) => {
+    private sortCommandBy = async (request: Request, response: Response) => {
         const data: FiltersCommandInterface = request.query
         response.send(await this.commandService.sortCommandBy(data))
     }
 
-
-    private addProduct = async (request: Request, response: Response, next: NextFunction) => {
-        response.send(await this.commandService.addProduct(request.params.id, request.params.productId))
+    private addProduct = async (request: Request, response: Response, next_f: NextFunction) => {
+        response.send(await this.commandService.addProduct(request.params.id, request.params.productId, next_f))
     }
 
-    private deleteProduct = async (request: Request, response: Response, next: NextFunction) => {
-        response.send(await this.commandService.deleteProduct(request.params.id, request.params.productId))
+    private deleteProduct = async (request: Request, response: Response, next_f: NextFunction) => {
+        response.send(await this.commandService.deleteProduct(request.params.id, request.params.productId, next_f))
     }
 
-    private buyCommand = async (request: Request, response: Response, next: NextFunction) => {
+    private buyCommand = async (request: Request, response: Response, next_f: NextFunction) => {
         const commandData: UpdateCommandDto = request.body;
-        response.send(await this.commandService.buy(request.params.id, commandData))
+        const result = await this.commandService.buy(request.params.id, commandData, next_f)
+        if (result)
+            response.send(result)
     }
 }

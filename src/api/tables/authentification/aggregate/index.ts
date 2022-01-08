@@ -1,0 +1,1 @@
+export {isUserExistAggregate} from './isUserExist.aggregate'

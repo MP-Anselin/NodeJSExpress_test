@@ -36,6 +36,7 @@ class App {
     }
 
     private initializeErrorHandling() {
+        console.log("I pass initializeErrorHandling")
         this.app.use(ErrorHandlingMiddleware);
     }
 

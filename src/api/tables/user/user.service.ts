@@ -15,6 +15,7 @@ export class UserService {
     async create(newUserData: CreateUserDto, next_f: NextFunction) {
         const alreadyUser = await this.checkUserAlreadyExist(newUserData);
         if (alreadyUser.length !== 0) {
+	    logger.error("Route: User => [error] create new user conflict of user ");
             next_f(new UserErrorException(<string>process.env.CONFLICT_CODE))
             return
         }
@@ -29,7 +30,7 @@ export class UserService {
             logger.info("Route: User => create new user");
             return response
         }
-        logger.info("Route: User => [error] create new user");
+        logger.error("Route: User => [error] create new user");
         next_f(new UserErrorException(<string>process.env.CONFLICT_CODE))
     }
 

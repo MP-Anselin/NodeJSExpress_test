@@ -5,6 +5,7 @@ import connectDB from "./api/services/database.service";
 import Controller from "./api/tables/controller";
 import {ErrorHandlingMiddleware} from "./api/middleware";
 import {logger} from "./api/logger";
+import cors from 'cors';
 
 class App {
     public app: express.Application;
@@ -16,6 +17,7 @@ class App {
         this.initializeMiddlewares();
         this.initializeControllers(controllers);
         this.initializeErrorHandling();
+
     }
 
     public listen() {
@@ -25,6 +27,7 @@ class App {
     }
 
     private initializeMiddlewares() {
+        this.app.use(cors());
         this.app.use(bodyParser.json());
         this.app.use(cookieParser());
     }

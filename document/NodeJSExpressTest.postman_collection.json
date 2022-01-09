@@ -1,0 +1,539 @@
+{
+	"info": {
+		"_postman_id": "4c239962-fc0c-45b7-beb6-230b57950474",
+		"name": "NodeJSExpressTest",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Get All Products",
+					"request": {
+						"auth": {
+							"type": "basic"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5565/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5565",
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get One Product",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5565/product/61daa5c90f2e770d95f88ce0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5565",
+							"path": [
+								"product",
+								"61daa5c90f2e770d95f88ce0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create One Product",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"test7_name\",\n    \"price\": 6,\n    \"category\": \"test7_category\",\n    \"description\": \"test7_descryption\",\n    \"quantity\": 7\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5565/product",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5565",
+							"path": [
+								"product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update one product",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"quantity\": 16\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5565/product/61daa3c755d544f071b8feb1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5565",
+							"path": [
+								"product",
+								"61daa3c755d544f071b8feb1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete One Product",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:5565/product/61daa5c90f2e770d95f88ce0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5565",
+							"path": [
+								"product",
+								"61daa5c90f2e770d95f88ce0"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Commands",
+			"item": [
+				{
+					"name": "Create One Command",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"articles\": [\"61daa40255d544f071b8febd\", \"61daa3f655d544f071b8feba\", \"61daa5770f2e770d95f88cd8\", \"61daa5770f2e770d95f88cd8\", \"61daa5770f2e770d95f88cd8\"]\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5565/command",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5565",
+							"path": [
+								"command"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get One Command By Date",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5565/commands/find/date/2022-01-09T09:13:26.154Z",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5565",
+							"path": [
+								"commands",
+								"find",
+								"date",
+								"2022-01-09T09:13:26.154Z"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buy One Command",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:5565/command/buy/61daa736e8e8bba88ff2547f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5565",
+							"path": [
+								"command",
+								"buy",
+								"61daa736e8e8bba88ff2547f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Product To Command",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:5565/commands/add/61daa736e8e8bba88ff2547f&61daa40255d544f071b8febd",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5565",
+							"path": [
+								"commands",
+								"add",
+								"61daa736e8e8bba88ff2547f&61daa40255d544f071b8febd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete One Product In Command",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:5565/command/delete/61daab00c641e3951ee3108d&61daa5770f2e770d95f88cd8",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5565",
+							"path": [
+								"command",
+								"delete",
+								"61daab00c641e3951ee3108d&61daa5770f2e770d95f88cd8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find one command by date and price",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5565/commands/sort/?date=2022-01-09&price=20",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5565",
+							"path": [
+								"commands",
+								"sort",
+								""
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "2022-01-09"
+								},
+								{
+									"key": "price",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Filter By Date/Articles/Price",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5565/commands/sort?date=2022-01-09&articles=61daa3f655d544f071b8feba&price=20",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5565",
+							"path": [
+								"commands",
+								"sort"
+							],
+							"query": [
+								{
+									"key": "date",
+									"value": "2022-01-09"
+								},
+								{
+									"key": "articles",
+									"value": "61daa3f655d544f071b8feba"
+								},
+								{
+									"key": "price",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Create a User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"test1\",\n    \"lastName\": \"test1\",\n    \"username\": \"test1\",\n    \"email\": \"test1@gmail.com\",\n    \"password\": \"Mackendy88\",\n    \"command\": []\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5565/user/auth/signup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5565",
+							"path": [
+								"user",
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5565/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5565",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Disconnect User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:5565/user/auth/logout/61d9f7c8238cd600b0335845",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5565",
+							"path": [
+								"user",
+								"auth",
+								"logout",
+								"61d9f7c8238cd600b0335845"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test2@gmail.com\",\n    \"password\": \"Mackendy88\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5565/user/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5565",
+							"path": [
+								"user",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all User commands",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5565/user/commands/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5565",
+							"path": [
+								"user",
+								"commands",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all User products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5565/user/products/61da10ab543e9c55d6ca5499",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5565",
+							"path": [
+								"user",
+								"products",
+								"61da10ab543e9c55d6ca5499"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

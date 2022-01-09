@@ -3,4 +3,5 @@ export interface FiltersCommandInterface{
     articles?: {  } | string,
     price?: {  } | number,
     min_price?: {  } | number,
+    user_id?: {  } | string,
 }

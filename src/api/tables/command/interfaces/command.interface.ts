@@ -7,4 +7,5 @@ export interface CommandInterface extends Document{
     articles: [],
     min_price: number,
     isCompleted: boolean,
+    user_id: String
 }

@@ -4,17 +4,19 @@ import {ProductService} from "./product.service";
 import {UpdateProductDto, CreateProductDto} from "./dto"
 import {AuthenticationMiddleware} from "../../middleware";
 import ValidationUserMiddleware from "../../middleware/validateUser.middleware";
+import RequestUserInterface from "../user/interfaces/requestUser.interface";
+import {ObjectId} from "mongodb";
 
 export class ProductController extends Controller {
 
     constructor(private readonly productService: ProductService = new ProductService()) {
-        super('/products')
+        super('/product')
         this.initializeRoutes();
     }
 
     private initializeRoutes() {
         this.router.all(`${this.path}/*`, AuthenticationMiddleware)
-            .get(this.path, AuthenticationMiddleware, this.getAllProducts)
+            .get(`${this.path}s`, AuthenticationMiddleware, this.getAllProducts)
             .get(`${this.path}/:id`, this.getProductById)
             .post(this.path, AuthenticationMiddleware, ValidationUserMiddleware(CreateProductDto, true), this.createProduct)
             .patch(`${this.path}/:id`, AuthenticationMiddleware, ValidationUserMiddleware(UpdateProductDto, true), this.updateProduct)
@@ -31,8 +33,9 @@ export class ProductController extends Controller {
             response.send(result)
     }
 
-    private createProduct = async (request: Request, response: Response, next_f: NextFunction) => {
+    private createProduct = async (request: RequestUserInterface, response: Response, next_f: NextFunction) => {
         const productData: CreateProductDto = request.body;
+        productData.user_id = new ObjectId(request.user?._id)
         const result = await this.productService.create(productData, next_f)
         if (result)
             response.send(result)

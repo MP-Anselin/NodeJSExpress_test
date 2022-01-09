@@ -86,7 +86,6 @@ export class CommandService {
     }
 
     async buy(_id: string, updateCommandData: UpdateCommandDto, next_f: NextFunction) {
-        await this.productService.reduceQuantity(_id, next_f);
         updateCommandData.isCompleted = true;
         updateCommandData.date = new Date();
         updateCommandData.updatedAt = new Date();

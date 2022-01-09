@@ -26,8 +26,12 @@ export class ProductService {
         return this.productModel.find();
     }
 
+    async sortProductBy(filter: {}) {
+        logger.info("Route: Product => findAll product");
+        return this.productModel.find(filter);
+    }
+
     async findOne(filter: {}, next_f: NextFunction) {
-        logger.info("Route: findOne a product");
         const response = await this.productModel.findOne(filter)
         if (response) {
             logger.info("Route: findOne a product");
@@ -52,17 +56,6 @@ export class ProductService {
     async getPrice(_id: string, next_f: NextFunction) {
         const currentProd = await this.findOne({_id: _id}, next_f)
         return currentProd?.price ? currentProd.price : 0
-    }
-
-    async reduceQuantity(_id: string, next_f: NextFunction) {
-        const response = await this.findOne({_id: _id}, next_f)
-        if (response) {
-            logger.info("Route: Product => reduceQuantity a product");
-            return (response)
-        } else {
-            logger.error("Route: Product => [error] reduceQuantity a product");
-            next_f(new ProductErrorException(<string>process.env.NOT_FOUND_CODE, `the server could not find product with _id ${_id}`))
-        }
     }
 
     async delete(_id: string, next_f: NextFunction) {

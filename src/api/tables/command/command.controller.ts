@@ -3,26 +3,33 @@ import Controller from "../controller";
 import {CommandService} from "./command.service";
 import {CreateCommandDto, UpdateCommandDto} from "./dto";
 import {FiltersCommandInterface} from "./interfaces";
+import RequestUserInterface from "../user/interfaces/requestUser.interface";
+import {AuthenticationMiddleware} from "../../middleware";
+import ValidationUserMiddleware from "../../middleware/validateUser.middleware";
+import {ObjectId} from "mongodb";
 
 export class CommandController extends Controller {
     constructor(private readonly commandService: CommandService = new CommandService()) {
-        super('/commands')
+        super('/command')
         this.initializeRoutes();
     }
 
     private initializeRoutes() {
-        this.router.post(this.path, this.createCommand)
-            .get(`${this.path}/find/:date&:price`, this.getCommandByDatePrice)
-            .get(`${this.path}/find/date/:date`, this.getNbrCommandByDate)
-            .get(`${this.path}/sort*?`, this.sortCommandBy)
-            .patch(`${this.path}/:id`, this.updateCommand)
-            .patch(`${this.path}/add/:id&:productId`, this.addProduct)
-            .patch(`${this.path}/delete/:id&:productId`, this.deleteProduct)
-            .patch(`${this.path}/buy/:id?`, this.buyCommand)
+        this.router.all(`${this.path}/*`, AuthenticationMiddleware)
+            .post(`${this.path}`, AuthenticationMiddleware, ValidationUserMiddleware(CreateCommandDto, true), this.createCommand)
+            .get(`${this.path}s/find/:date&:price`, this.getCommandByDatePrice)
+            .get(`${this.path}s/find/date/:date`, this.getNbrCommandByDate)
+            .get(`${this.path}s/sort*?`, this.sortCommandBy)
+            .patch(`${this.path}/:id`, ValidationUserMiddleware(UpdateCommandDto, true), this.updateCommand)
+            .patch(`${this.path}s/add/:id&:productId`, ValidationUserMiddleware(UpdateCommandDto, true), this.addProduct)
+            .patch(`${this.path}/delete/:id&:productId`, ValidationUserMiddleware(UpdateCommandDto, true), this.deleteProduct)
+            .patch(`${this.path}/buy/:id?`, ValidationUserMiddleware(UpdateCommandDto, true), this.buyCommand)
     }
 
-    private createCommand = async (request: Request, response: Response, next_f: NextFunction) => {
+    private createCommand = async (request: RequestUserInterface, response: Response, next_f: NextFunction) => {
         const commandData: CreateCommandDto = request.body;
+        commandData.user_id = new ObjectId(request.user?._id)
+
         const result = await this.commandService.create(commandData, next_f)
         if (result)
             response.send(result)

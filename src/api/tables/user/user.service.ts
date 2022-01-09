@@ -4,13 +4,17 @@ import {CreateUserDto, UpdateUserDto} from "./dto";
 import {ProductErrorException, UserErrorException} from "../../httpErrorException";
 import {NextFunction} from "express";
 import {isUserExistAggregate} from "../authentification/aggregate";
+import {CommandService} from "../command/command.service";
+import {ProductService} from "../product/product.service";
 
 export class UserService {
     private userModel = UserModel
+    private commandService = new CommandService()
+    private productService = new ProductService()
 
     async create(newUserData: CreateUserDto, next_f: NextFunction) {
         const alreadyUser = await this.checkUserAlreadyExist(newUserData);
-        if (alreadyUser) {
+        if (alreadyUser.length !== 0) {
             next_f(new UserErrorException(<string>process.env.CONFLICT_CODE))
             return
         }
@@ -19,7 +23,7 @@ export class UserService {
 
         createUser.createAt = date
         createUser.updateAt = date
-        createUser.isLog = false
+        createUser.isLog = true
         const response = await createUser.save();
         if (response) {
             logger.info("Route: User => create new user");
@@ -35,8 +39,42 @@ export class UserService {
     }
 
     async findAll() {
-        logger.info("Route: User => findAll product");
+        logger.info("Route: User => find All user");
         return this.userModel.find();
+    }
+
+    async findAllCommands(_id: string, next_f: NextFunction) {
+        if (!_id) {
+            logger.info("Route: User => [error] find user commands");
+            next_f(new ProductErrorException(<string>process.env.NOT_FOUND_CODE, `the server could not find user commands with id ${_id}`))
+            return
+        }
+        const cmdSort = {user_id: _id}
+        const response = this.commandService.sortCommandBy(cmdSort);
+        if (!response) {
+            logger.info("Route: User => [error] find user commands");
+            next_f(new ProductErrorException(<string>process.env.NOT_FOUND_CODE, `the server could not find user commands with id ${_id}`))
+            return
+        }
+        logger.info("Route: User => find user commands");
+        return response;
+    }
+
+    async findAllProducts(_id: string, next_f: NextFunction) {
+        if (!_id) {
+            logger.info("Route: User => [error] find user commands");
+            next_f(new ProductErrorException(<string>process.env.NOT_FOUND_CODE, `the server could not find user commands with id ${_id}`))
+            return
+        }
+        const cmdSort = {user_id: _id}
+        const response = this.productService.sortProductBy(cmdSort);
+        if (!response) {
+            logger.error("Route: User => [error] find user products");
+            next_f(new ProductErrorException(<string>process.env.NOT_FOUND_CODE, `the server could not find user commands with id ${_id}`))
+            return
+        }
+        logger.info("Route: User => find user products");
+        return response;
     }
 
     async findOne(filter: {}, next_f: NextFunction) {
@@ -50,15 +88,14 @@ export class UserService {
         }
     }
 
-
     async updateInfo(updateData: UpdateUserDto, userFilterQuery: {}, next_f: NextFunction) {
         updateData.updateAt = new Date()
         const response = await this.userModel.findOneAndUpdate(userFilterQuery, updateData, {useFindAndModify: false})
         if (response) {
-            logger.info("Route: User => update user data");
+            logger.info("Route: User => update user info");
             return response
         }
-        logger.error("Route: User => [error] update user data");
+        logger.error("Route: User => [error] update user info");
         next_f(new UserErrorException(<string>process.env.BAD_REQUEST_CODE))
 
     }

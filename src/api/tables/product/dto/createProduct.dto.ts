@@ -1,4 +1,5 @@
 import { IsString, IsNumber, Min } from 'class-validator';
+import {ObjectId} from "mongodb";
 
 class CreateProductDto {
     @IsString()
@@ -17,6 +18,8 @@ class CreateProductDto {
     @IsNumber()
     @Min(0)
     public quantity: number = 0;
+
+    public user_id: ObjectId | any;
 }
 
 export default CreateProductDto;

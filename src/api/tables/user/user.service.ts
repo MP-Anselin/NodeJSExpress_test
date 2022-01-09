@@ -40,7 +40,7 @@ export class UserService {
     }
 
     async findOne(filter: {}, next_f: NextFunction) {
-        const response = this.userModel.findOne(filter)
+        const response = await this.userModel.findOne(filter)
         if (response) {
             logger.info("Route: User => findOne a user");
             return (response)
@@ -53,7 +53,7 @@ export class UserService {
 
     async updateInfo(updateData: UpdateUserDto, userFilterQuery: {}, next_f: NextFunction) {
         updateData.updateAt = new Date()
-        const response = this.userModel.findOneAndUpdate(userFilterQuery, updateData, {useFindAndModify: false})
+        const response = await this.userModel.findOneAndUpdate(userFilterQuery, updateData, {useFindAndModify: false})
         if (response) {
             logger.info("Route: User => update user data");
             return response

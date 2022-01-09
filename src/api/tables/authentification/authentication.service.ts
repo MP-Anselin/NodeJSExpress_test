@@ -27,8 +27,9 @@ export class AuthenticationService {
     async logIn(userCheckPWD: UserInterface, next_f: NextFunction) {
         const logInData: LogInDto = userCheckPWD;
         const userData = await this.userService.findOne({email: userCheckPWD.email}, next_f)
-        if (!userData)
+        if (!userData) {
             return
+        }
         if (await bcrypt.compare(logInData.password, userData.get('password', null, {getters: false}))) {
             const tokenData = await AuthenticationService.createToken(userData);
             const cookie = AuthenticationService.createCookie(tokenData)

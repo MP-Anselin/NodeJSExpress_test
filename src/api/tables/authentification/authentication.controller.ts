@@ -13,9 +13,9 @@ export class AuthenticationController extends Controller {
     }
 
     private initializeRoutes() {
-        this.router.post(`${this.path}/signup`, ValidationUserMiddleware(CreateUserDto) ,this.signUp);
-        this.router.post(`${this.path}/login`, ValidationUserMiddleware(LogInDto) ,this.logIn);
-        this.router.post(`${this.path}/logout/:id`, AuthenticationMiddleware, this.logOut);
+        this.router.post(`${this.path}/signup`, ValidationUserMiddleware(CreateUserDto), this.signUp)
+            .post(`${this.path}/login`, ValidationUserMiddleware(LogInDto), this.logIn)
+            .post(`${this.path}/logout/:id`, AuthenticationMiddleware, this.logOut)
     }
 
     private signUp = async (request: Request, response: Response, next_f: NextFunction) => {
@@ -37,13 +37,13 @@ export class AuthenticationController extends Controller {
         const result = await this.authenticationService.logOut(request.params.id, next_f)
         if (result) {
             response.setHeader('Set-Cookie', ['Authorization=;Max-age=0']);
-            response.cookie('Authorization',  '');
+            response.cookie('Authorization', '');
             response.cookie('Max-Age', 0);
             response.send(result);
         }
     }
 
-    private static setCookie(response: Response, result: any){
+    private static setCookie(response: Response, result: any) {
         const {cookie, user} = result
         response.setHeader('Set-Cookie', ['HttpOnly']);
         response.cookie('Authorization', cookie.Authorization);

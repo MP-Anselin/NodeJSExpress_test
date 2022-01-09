@@ -28,7 +28,7 @@ export class ProductService {
 
     async findOne(filter: {}, next_f: NextFunction) {
         logger.info("Route: findOne a product");
-        const response = this.productModel.findOne(filter)
+        const response = await this.productModel.findOne(filter)
         if (response) {
             logger.info("Route: findOne a product");
             return (response)
@@ -39,7 +39,7 @@ export class ProductService {
     }
 
     async update(_id: string, updateProductsData: UpdateProductDto, next_f: NextFunction) {
-        const response = this.productModel.findOneAndUpdate({_id}, updateProductsData, {useFindAndModify: false})
+        const response = await this.productModel.findOneAndUpdate({_id}, updateProductsData, {useFindAndModify: false})
         if (response) {
             logger.info("Route: Product => update a product");
             return (response)

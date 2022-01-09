@@ -36,7 +36,7 @@ export class CommandService {
 
     async update(_id: string, updateCommandData: UpdateCommandDto, next_f: NextFunction) {
         updateCommandData.updatedAt = new Date();
-        const response = this.commandModel.findOneAndUpdate({_id: _id}, updateCommandData)
+        const response = await this.commandModel.findOneAndUpdate({_id: _id}, updateCommandData)
         if (response) {
             logger.info("Route: Command => update a command");
             return (response)

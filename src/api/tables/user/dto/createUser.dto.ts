@@ -1,4 +1,4 @@
-import {IsArray, IsString, IsBoolean, MinLength, MaxLength, Matches} from 'class-validator';
+import {IsString, IsBoolean, MinLength, MaxLength, Matches, IsNumber} from 'class-validator';
 
 export class CreateUserDto {
     @IsString()
@@ -14,6 +14,12 @@ export class CreateUserDto {
     email: string = '';
 
     @IsString()
+    userRole: string = '';
+
+    @IsString()
+    image: string = '';
+
+    @IsString()
     @MinLength(4)
     @MaxLength(20)
     @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {message: 'password too weak'})
@@ -22,8 +28,11 @@ export class CreateUserDto {
     @IsBoolean()
     isLog: boolean = false;
 
-    @IsArray()
-    command: [] = [];
+    @IsNumber()
+    status: number = 1;
+
+    @IsNumber()
+    age: number | undefined;
 }
 
 export default CreateUserDto

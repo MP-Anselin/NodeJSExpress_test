@@ -27,7 +27,11 @@ class App {
     }
 
     private initializeMiddlewares() {
-        this.app.use(cors());
+        const corsConfig = {
+            credentials: true,
+            origin: true,
+        };
+        this.app.use(cors(corsConfig));
         this.app.use(bodyParser.json());
         this.app.use(cookieParser());
     }

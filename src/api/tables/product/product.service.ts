@@ -2,7 +2,8 @@ import ProductModel from "./model/product.model";
 import {UpdateProductDto, CreateProductDto} from "./dto"
 import {logger} from "../../logger";
 import {NextFunction} from "express";
-import {ProductErrorException} from "../../httpErrorException";
+import {INTERNAL_SERVER_ERROR, NOT_FOUND} from "../../utils/macro.globals";
+import { HttpErrorException } from "../../httpErrorException";
 
 export class ProductService {
     private productModel = ProductModel;
@@ -17,7 +18,7 @@ export class ProductService {
             return (response)
         } else {
             logger.error("Route: Product => [error] create new Products");
-            next_f(new ProductErrorException(<string>process.env.INTERNAL_SERVER_ERROR_MSG))
+            next_f(new HttpErrorException(INTERNAL_SERVER_ERROR))
         }
     }
 
@@ -38,7 +39,7 @@ export class ProductService {
             return (response)
         } else {
             logger.error("Route: Product => [error] findOne a product");
-            next_f(new ProductErrorException(<string>process.env.NOT_FOUND_CODE, `the server could not find product with element ${filter}`))
+            next_f(new HttpErrorException(NOT_FOUND, `the server could not find product with element ${filter}`))
         }
     }
 
@@ -49,7 +50,7 @@ export class ProductService {
             return (response)
         } else {
             logger.error("Route: Product => [error] update a product");
-            next_f(new ProductErrorException(<string>process.env.NOT_FOUND_CODE, `the server could not find product with _id ${_id}`))
+            next_f(new HttpErrorException(NOT_FOUND, `the server could not find product with _id ${_id}`))
         }
     }
 
@@ -65,7 +66,7 @@ export class ProductService {
             return (response)
         } else {
             logger.error("Route: Product => [error] delete a product");
-            next_f(new ProductErrorException(<string>process.env.NOT_FOUND_CODE, `the server could not find product with _id ${_id}`))
+            next_f(new HttpErrorException(NOT_FOUND, `the server could not find product with _id ${_id}`))
         }
     }
 }

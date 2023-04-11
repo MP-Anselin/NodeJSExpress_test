@@ -1,11 +1,12 @@
 import UserModel from "./model/user.model";
 import {logger} from "../../logger";
 import {CreateUserDto, UpdateUserDto} from "./dto";
-import {ProductErrorException, UserErrorException} from "../../httpErrorException";
 import {NextFunction} from "express";
 import {isUserExistAggregate} from "../authentification/aggregate";
 import {CommandService} from "../command/command.service";
 import {ProductService} from "../product/product.service";
+import {BAD_REQUEST, CONFLICT, NOT_FOUND} from "../../utils/macro.globals";
+import {HttpErrorException} from "../../httpErrorException";
 
 export class UserService {
     private userModel = UserModel
@@ -15,8 +16,8 @@ export class UserService {
     async create(newUserData: CreateUserDto, next_f: NextFunction) {
         const alreadyUser = await this.checkUserAlreadyExist(newUserData);
         if (alreadyUser.length !== 0) {
-	    logger.error("Route: User => [error] create new user conflict of user ");
-            next_f(new UserErrorException(<string>process.env.CONFLICT_CODE))
+            logger.error("Route: User => [error] create new user conflict of user ");
+            next_f(new HttpErrorException(CONFLICT))
             return
         }
         const createUser = new this.userModel(newUserData)
@@ -31,7 +32,7 @@ export class UserService {
             return response
         }
         logger.error("Route: User => [error] create new user");
-        next_f(new UserErrorException(<string>process.env.CONFLICT_CODE))
+        next_f(new HttpErrorException(CONFLICT))
     }
 
     async checkUserAlreadyExist(userData: CreateUserDto) {
@@ -47,14 +48,14 @@ export class UserService {
     async findAllCommands(_id: string, next_f: NextFunction) {
         if (!_id) {
             logger.info("Route: User => [error] find user commands");
-            next_f(new ProductErrorException(<string>process.env.NOT_FOUND_CODE, `the server could not find user commands with id ${_id}`))
+            next_f(new HttpErrorException(NOT_FOUND, `the server could not find user commands with id ${_id}`))
             return
         }
         const cmdSort = {user_id: _id}
         const response = this.commandService.sortCommandBy(cmdSort);
         if (!response) {
             logger.info("Route: User => [error] find user commands");
-            next_f(new ProductErrorException(<string>process.env.NOT_FOUND_CODE, `the server could not find user commands with id ${_id}`))
+            next_f(new HttpErrorException(NOT_FOUND, `the server could not find user commands with id ${_id}`))
             return
         }
         logger.info("Route: User => find user commands");
@@ -64,14 +65,14 @@ export class UserService {
     async findAllProducts(_id: string, next_f: NextFunction) {
         if (!_id) {
             logger.info("Route: User => [error] find user commands");
-            next_f(new ProductErrorException(<string>process.env.NOT_FOUND_CODE, `the server could not find user commands with id ${_id}`))
+            next_f(new HttpErrorException(NOT_FOUND, `the server could not find user commands with id ${_id}`))
             return
         }
         const cmdSort = {user_id: _id}
         const response = this.productService.sortProductBy(cmdSort);
         if (!response) {
             logger.error("Route: User => [error] find user products");
-            next_f(new ProductErrorException(<string>process.env.NOT_FOUND_CODE, `the server could not find user commands with id ${_id}`))
+            next_f(new HttpErrorException(NOT_FOUND, `the server could not find user commands with id ${_id}`))
             return
         }
         logger.info("Route: User => find user products");
@@ -79,13 +80,14 @@ export class UserService {
     }
 
     async findOne(filter: {}, next_f: NextFunction) {
-        const response = await this.userModel.findOne(filter)
+        let response = await this.userModel
+            .findOne(filter)
         if (response) {
             logger.info("Route: User => findOne a user");
             return (response)
         } else {
             logger.error("Route: User => [error] findOne a user");
-            next_f(new ProductErrorException(<string>process.env.NOT_FOUND_CODE, `the server could not find user with element ${filter}`))
+            next_f(new HttpErrorException(NOT_FOUND, `the server could not find user with element ${filter}`))
         }
     }
 
@@ -97,14 +99,12 @@ export class UserService {
             return response
         }
         logger.error("Route: User => [error] update user info");
-        next_f(new UserErrorException(<string>process.env.BAD_REQUEST_CODE))
+        next_f(new HttpErrorException(BAD_REQUEST))
 
     }
 
     async logOut(_id: string, next_f: NextFunction) {
-        const user: UpdateUserDto = new UpdateUserDto()
-        user.isLog = false
-        const response = await this.updateInfo(user, {_id: _id}, next_f)
+        const response = await this.updateInfo({isLog: false}, {_id: _id}, next_f)
         if (response) {
             logger.info("Route: User => log out user");
             return (response)

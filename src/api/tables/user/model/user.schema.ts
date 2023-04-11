@@ -10,5 +10,8 @@ export const UserSchema = new Schema<UserInterface> ({
     isLog: {type: Boolean, required: true},
     createAt: {type: Date, required: true},
     updateAt: {type: Date, required: true},
-    command: {type: [], required: true}
+    status: {type: Number, required: true},
+    age: {type: Number, required: true},
+    userRole: {type: String, required: true},
+    image: {type: String, required: true},
 })

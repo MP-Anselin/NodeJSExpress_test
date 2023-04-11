@@ -6,7 +6,8 @@ import {ProductService} from "../product/product.service";
 import {ObjectId} from "mongodb";
 import {FiltersCommandInterface} from "./interfaces";
 import {NextFunction} from "express";
-import {CommandErrorException} from "../../httpErrorException";
+import {INTERNAL_SERVER_ERROR, NOT_FOUND} from "../../utils/macro.globals";
+import { HttpErrorException } from "../../httpErrorException";
 
 export class CommandService {
     private commandModel = CommandModel;
@@ -30,7 +31,7 @@ export class CommandService {
         }
         else {
             logger.error("Route: Command => [error] create new command");
-            next_f(new CommandErrorException(<string>process.env.INTERNAL_SERVER_ERROR_CODE))
+            next_f(new HttpErrorException(INTERNAL_SERVER_ERROR))
         }
     }
 
@@ -42,7 +43,7 @@ export class CommandService {
             return (response)
         } else {
             logger.error("Route: Command => [error] update a command");
-            next_f(new CommandErrorException(<string>process.env.NOT_FOUND_CODE, `the server could not find command with _id ${_id}`))
+            next_f(new HttpErrorException(NOT_FOUND, `the server could not find command with _id ${_id}`))
         }
     }
 
@@ -58,7 +59,7 @@ export class CommandService {
             return (response)
         } else {
             logger.error("Route: Command => [error] add a product in command");
-            next_f(new CommandErrorException(<string>process.env.NOT_FOUND_CODE, `the server could not find command with _id ${_id}`))
+            next_f(new HttpErrorException(NOT_FOUND, `the server could not find command with _id ${_id}`))
         }
     }
 
@@ -70,7 +71,7 @@ export class CommandService {
             return (response)
         } else {
             logger.error("Route: Command => [error] delete a product in command");
-            next_f(new CommandErrorException(<string>process.env.NOT_FOUND_CODE, `the server could not find command with _id ${_id}`))
+            next_f(new HttpErrorException(NOT_FOUND, `the server could not find command with _id ${_id}`))
         }
     }
 
@@ -95,7 +96,7 @@ export class CommandService {
             return (response)
         } else {
             logger.error("Route: Command => [error] update a command");
-            next_f(new CommandErrorException(<string>process.env.NOT_FOUND_CODE, `the server could not find command with _id ${_id}`))
+            next_f(new HttpErrorException(NOT_FOUND, `the server could not find command with _id ${_id}`))
         }
     }
 

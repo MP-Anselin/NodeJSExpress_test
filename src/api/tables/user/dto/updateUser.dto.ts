@@ -1,4 +1,4 @@
-import {IsArray, IsBoolean, IsDateString, IsString, Matches, MaxLength, MinLength} from "class-validator";
+import {IsArray, IsBoolean, IsDateString, IsNumber, IsString, Matches, MaxLength, MinLength} from "class-validator";
 
 export class UpdateUserDto {
     @IsString()
@@ -12,6 +12,12 @@ export class UpdateUserDto {
 
     @IsString()
     email?: string;
+
+    @IsString()
+    userRole?: string;
+
+    @IsString()
+    image?: string;
 
     @IsString()
     @MinLength(4)
@@ -28,8 +34,11 @@ export class UpdateUserDto {
     @IsDateString()
     updateAt?: Date;
 
-    @IsArray()
-    command?: [];
+    @IsNumber()
+    status?: Number;
+
+    @IsNumber()
+    age?: Number;
 }
 
 export default UpdateUserDto

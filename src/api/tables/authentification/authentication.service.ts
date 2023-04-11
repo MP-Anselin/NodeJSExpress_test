@@ -6,8 +6,10 @@ import TokenDataInterface from "./interfaces/token.interface";
 import {UserInterface} from "../user/interfaces";
 import {jwtToken} from '../../services/token'
 import {logger} from "../../logger";
-import {UserErrorException} from "../../httpErrorException";
 import {LogInDto} from "./dto";
+import {FORBIDDEN} from "../../utils/macro.globals";
+import { HttpErrorException } from "../../httpErrorException";
+import UserResponse from "./dto/UserResponse.dto";
 
 export class AuthenticationService {
     constructor(private userService: UserService = new UserService()) {
@@ -21,7 +23,7 @@ export class AuthenticationService {
         const tokenData = await AuthenticationService.createToken(user)
         const cookie = AuthenticationService.createCookie(tokenData)
         logger.info("Route: Authentication => sign up a user");
-        return {cookie, user}
+        return {cookie, user: new  UserResponse(user)}
     }
 
     async logIn(userCheckPWD: UserInterface, next_f: NextFunction) {
@@ -35,12 +37,12 @@ export class AuthenticationService {
             const cookie = AuthenticationService.createCookie(tokenData)
             if (await this.userService.updateInfo({isLog: true}, {_id: userData._id}, next_f)) {
                 logger.info("Route: Authentication => log in a user");
-                return {cookie, user: userData}
+                return {cookie, user: new UserResponse(userData)}
             }
             return
         }
         logger.error("Route: Authentication => [error] log in a user");
-        next_f(new UserErrorException(<string>process.env.FORBIDDEN_CODE))
+        next_f(new HttpErrorException(FORBIDDEN))
     }
 
     async logOut(_id: string, next_f: NextFunction) {

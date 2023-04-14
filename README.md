@@ -107,6 +107,12 @@ $ npm install
 
 ## Running the app
 
+create file "config.env" inside of config folder and add this missing information :<br>
+PORT =<br>
+MONGO_URI =<br>
+JWT_SECRET =<br>
+
+
 ```bash
 # development
 $ npm run start
